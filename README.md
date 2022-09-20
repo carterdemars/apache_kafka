@@ -1,6 +1,6 @@
 # Kafka Docker Python
 
-This script can guide you through setting up a basic kafka producer and consumer in Python, and running them within a docker image.
+This document can guide you through setting up a basic kafka producer and consumer in Python, and running them within a docker image.
 
 Project tree:
 
