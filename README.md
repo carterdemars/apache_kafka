@@ -47,12 +47,6 @@ docker exec to kafka container:
 
 `docker exec -it kafka /bin/sh`
 
-Access to kafka folder:
-
-```bash
- /opt/kafka_2.13-2.8.1/bin
-```
-
 ****Creating a topic****
 
 ```bash
@@ -89,14 +83,15 @@ pip3 install kafka-python
 
 Once the "messages" topic has been created, you can execute
 
-'''bash
+```bash
 python3 consumers.py
-'''
-'''bash
-python3 producers.py
-'''
+```
 
-to run the scripts. You might need to navigate into the kafka_python folder to run these commands successfully.
+```bash
+python3 producers.py
+```
+
+in **separate terminals windows** to run the scripts. You might need to navigate into the kafka_python folder to run these commands successfully.
 
 # 4. Reference
 
@@ -107,4 +102,5 @@ The original script for setting up a producer and consumer in python can be foun
 Try these links.
 
 1: [How to Install Kafka Using Docker](https://betterdatascience.com/how-to-install-apache-kafka-using-docker-the-easy-way/)
+
 2: [Apache Kafka From the Shell](https://betterdatascience.com/master-the-kafka-shell-in-5-minutes-topics-producers-and-consumers-explained/)
