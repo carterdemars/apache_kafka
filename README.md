@@ -1,14 +1,6 @@
 # Kafka Docker Python
 
-# 0. Prescribed
-
-Với mục tiêu là thực hành chu chuyển dữ liệu publish-subscribe qua kafka không chú trọng quá nhiều về khái niêm Kafka, Docker… mà trên Mac mà mò mẫn cài VM hơi mệt nên thôi đành xài docker.
-
-Gear I use:
-
-- Mac-Pro M1: 16-256
-- Python3.9 (anaconda)
-- docker-compose version 1.29.2
+This script can guide you through setting up a basic kafka producer and consumer in Python, and running them within a docker image.
 
 Project tree:
 
@@ -20,21 +12,7 @@ Project tree:
     - docker-compose.yml
     - README.md
 
-Git repo: [https://github.com/TrinhAnBinh/Kafka-Docker-Python](https://github.com/TrinhAnBinh/Kafka-Docker-Python)
-
-Style viết theo dạng document nhanh gọn, anh việt lẫn lộn, các bác cân nhắc trước để đọc đỡ khó chịu. Thanks
-
 # 1. Set up docker compose
-
-Để cấu hình được kafka mình cần có một số components chính bao gồm:
-
-Kafka: Nơi thực thi các tác vụ chính
-
-Zookeeper: Nơi quản lý các tác vụ chính, quản lý task cho kafka.
-
-Vậy docker compose cũng cần pull 2 cái images này về và cho nó thông cổng với nhau.
-
-Tạo file docker-compose.yml như sau:
 
 ```yaml
 version: '3'
@@ -55,10 +33,10 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
 ```
 
-Start nó lên
+In WSL2, use the command:
 
 ```yaml
-docker-compose -f docker-compose.yml up -d
+docker compose -f docker-compose.yml up -d
 ```
 
 # 2. Docker CLI
@@ -69,7 +47,7 @@ docker exec to kafka container:
 
 `docker exec -it kafka /bin/sh`
 
-Access vào kafka folder:
+Access to kafka folder:
 
 ```bash
  /opt/kafka_2.13-2.8.1/bin
@@ -103,117 +81,30 @@ kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 --par
 
 # 3. Kafka-Python
 
-Việc tương tác với kafka khi đã start được lên rồi thì cũng đơn giản.
-
-Tham khảo thêm bài viết về kafka trên viblo rất nhiều để hiểu về concept, các loại arks rồi architectures.
-
-Các process bao gồm:
-
 **Install kafka-python:**
 
 ```bash
 pip3 install kafka-python
 ```
 
-**Tạo dummy data:**
+Once the "messages" topic has been created, you can execute
 
-**create file data_generator**
-
-```python
-import random 
-import string 
-
-user_ids = list(range(1, 101))
-recipient_ids = list(range(1, 101))
-
-def generate_message() -> dict:
-    random_user_id = random.choice(user_ids)
-
-    # Copy the recipients array
-    recipient_ids_copy = recipient_ids.copy()
-
-    # User can't send message to himself
-    recipient_ids_copy.remove(random_user_id)
-    random_recipient_id = random.choice(recipient_ids_copy)
-
-    # Generate a random message
-    message = ''.join(random.choice(string.ascii_letters) for i in range(32))
-
-    return {
-        'user_id': random_user_id,
-        'recipient_id': random_recipient_id,
-        'message': message
-    }
-```
-
-**Produce message:**
-
-**Tạo file producers**
-
-```python
-import time 
-import json 
-import random 
-from datetime import datetime
-from data_generator import generate_message
-from kafka import KafkaProducer
-
-# Messages will be serialized as JSON 
-def serializer(message):
-    return json.dumps(message).encode('utf-8')
-
-# Kafka Producer
-producer = KafkaProducer(
-    bootstrap_servers=['localhost:9092'],
-    value_serializer=serializer
-)
-
-if __name__ == '__main__':
-    # Infinite loop - runs until you kill the program
-    while True:
-        # Generate a message
-        dummy_message = generate_message()
-        
-        # Send it to our 'messages' topic
-        print(f'Producing message @ {datetime.now()} | Message = {str(dummy_message)}')
-        producer.send('messages', dummy_message)
-        
-        # Sleep for a random number of seconds
-        time_to_sleep = random.randint(1, 11)
-        time.sleep(time_to_sleep)
-```
-
-**Consume message:**
-
-**Tạo file: consumers**
-
-```python
-import json 
-from kafka import KafkaConsumer
-
-if __name__ == '__main__':
-    # Kafka Consumer 
-    consumer = KafkaConsumer(
-        'messages',
-        bootstrap_servers='localhost:9092',
-        auto_offset_reset='earliest'
-    )
-    for message in consumer:
-        my_bytes_value = message.value
-        my_json = my_bytes_value.decode('utf8').replace("'", '"')
-        print(json.loads(my_json))
-```
-
-Make sure đã start topic “messages" lên rồi.
-```bash
-python3 producers.py
+'''bash
 python3 consumers.py
-```
+'''
+'''bash
+python3 producers.py
+'''
+
+to run the scripts. You might need to navigate into the kafka_python folder to run these commands successfully.
 
 # 4. Reference
 
-Bài viết được document và chắt lọc nội dung chính. Để tham khảo bài viết gốc các bạn xem tại [đây](https://github.com/better-data-science/Apache-Kafka-in-Python) . Đây cũng là một resource rất ổn cho các bạn làm data
+The original script for setting up a producer and consumer in python can be found [here](https://github.com/better-data-science/Apache-Kafka-in-Python).
 
-# 5. What next?
+# 5. Getting Stuck?
 
-Hiện tại mình đã xong phần chu chuyển dữ liệu qua kafka. Sắp tới mình sẽ thử cho nó qua flink để có end to end realtime analysis process.
+Try these links.
+
+1: [How to Install Kafka Using Docker](https://betterdatascience.com/how-to-install-apache-kafka-using-docker-the-easy-way/)
+2: [Apache Kafka From the Shell](https://betterdatascience.com/master-the-kafka-shell-in-5-minutes-topics-producers-and-consumers-explained/)

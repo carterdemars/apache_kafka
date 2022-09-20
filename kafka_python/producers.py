@@ -5,11 +5,9 @@ from datetime import datetime
 from data_generator import generate_message
 from kafka import KafkaProducer
 
-
 # Messages will be serialized as JSON 
 def serializer(message):
     return json.dumps(message).encode('utf-8')
-
 
 # Kafka Producer
 producer = KafkaProducer(
@@ -17,10 +15,10 @@ producer = KafkaProducer(
     value_serializer=serializer
 )
 
-
 if __name__ == '__main__':
-    # Infinite loop - runs until you kill the program
-    while True:
+    
+    for i in range(50):
+
         # Generate a message
         dummy_message = generate_message()
         
