@@ -91,7 +91,7 @@ python3 consumers.py
 python3 producers.py
 ```
 
-in **separate terminals windows** to run the scripts. You might need to navigate into the kafka_python folder to run these commands successfully.
+in **separate terminal windows** to run the scripts. You might need to navigate into the kafka_python folder to run these commands successfully.
 
 # 4. Reference
 
