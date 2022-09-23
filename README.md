@@ -14,6 +14,8 @@ Project tree:
 
 # 1. Set up docker compose
 
+The following content should be in the docker-compose file. 
+
 ```yaml
 version: '3'
 
@@ -37,6 +39,11 @@ In WSL2, use the command:
 
 ```yaml
 docker compose -f docker-compose.yml up -d
+```
+
+I think the equivalent command in WSl1 is
+```yaml
+docker-compose -f docker-compose.yml up -d
 ```
 
 # 2. Docker CLI
